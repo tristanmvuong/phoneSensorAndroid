@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
                 getApplicationContext(),
-                "us-west-2:dd481c0b-18f0-4d73-8cc5-77e105909a68", // Identity Pool ID
+                "", // Identity Pool ID
                 Regions.US_WEST_2 // Region
         );
 
