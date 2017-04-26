@@ -6,11 +6,12 @@ import com.tristan.sensordatatracking.lambda.entity.DateRange;
 import com.tristan.sensordatatracking.lambda.entity.Result;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SensorData {
     @LambdaFunction(functionName="sensor_save")
     Result save(AccelerometerData data);
 
     @LambdaFunction(functionName="sensor_read")
-    List<AccelerometerData> getDataByDateRange(DateRange dateRange);
+    Map<String,AccelerometerData> getDataByDateRange(DateRange dateRange);
 }

@@ -8,6 +8,8 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
@@ -19,6 +21,7 @@ import com.tristan.sensordatatracking.lambda.function.SensorData;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private static final String TAG = "accelerometerSensor";
@@ -51,6 +54,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 Regions.US_WEST_2, credentialsProvider);
 
         this.sensorData = lambdaInvokerFactory.build(SensorData.class);
+
+        addListenerToGetAccelerometer();
+    }
+
+    public void addListenerToGetAccelerometer() {
+        Button getData = (Button) findViewById(R.id.getAccelerometerData);
+        getData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Map<String,AccelerometerData> data = getAccelerometerData(0L, System.currentTimeMillis());
+                Log.d(TAG, "Success");
+            }
+        });
     }
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -80,15 +96,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    private void getAccelerometerDate(Long startDate, Long endDate) {
+    private Map<String,AccelerometerData> getAccelerometerData(Long startDate, Long endDate) {
         DateRange dateRange = new DateRange();
         dateRange.setStartDate(startDate);
         dateRange.setEndDate(endDate);
         try {
-            List<AccelerometerData> dataCollection = sensorData.getDataByDateRange(dateRange);
-            Log.d(TAG, "Success");
+            return sensorData.getDataByDateRange(dateRange);
         } catch (Exception e) {
             Log.e(TAG, "error trying to get data");
+            return null;
         }
     }
 }
