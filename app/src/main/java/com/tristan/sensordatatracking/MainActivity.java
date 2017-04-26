@@ -7,13 +7,18 @@ import android.hardware.SensorManager;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
 import com.amazonaws.regions.Regions;
 import com.tristan.sensordatatracking.lambda.entity.AccelerometerData;
+import com.tristan.sensordatatracking.lambda.entity.DateRange;
 import com.tristan.sensordatatracking.lambda.function.SensorData;
+
+import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private static final String TAG = "accelerometerSensor";
@@ -65,8 +70,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             accelerometerData.setX(values[0]);
             accelerometerData.setY(values[1]);
             accelerometerData.setZ(values[2]);
-            sensorData.save(accelerometerData);
+            accelerometerData.setDate(System.currentTimeMillis());
+            try {
+                sensorData.save(accelerometerData);
+            } catch (Exception e) {
+                Log.e(TAG, "error trying to save the data");
+            }
             lastRun = System.currentTimeMillis();
+        }
+    }
+
+    private void getAccelerometerDate(Long startDate, Long endDate) {
+        DateRange dateRange = new DateRange();
+        dateRange.setStartDate(startDate);
+        dateRange.setEndDate(endDate);
+        try {
+            List<AccelerometerData> dataCollection = sensorData.getDataByDateRange(dateRange);
+            Log.d(TAG, "Success");
+        } catch (Exception e) {
+            Log.e(TAG, "error trying to get data");
         }
     }
 }

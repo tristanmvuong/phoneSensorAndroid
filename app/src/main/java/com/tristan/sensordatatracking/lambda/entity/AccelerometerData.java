@@ -7,4 +7,5 @@ public class AccelerometerData {
     private Float x;
     private Float y;
     private Float z;
+    private Long date;
 }
