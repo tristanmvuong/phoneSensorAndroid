@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/raw"
+        android:icon="@drawable/sensor"
+        android:title="@string/label_raw"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/graph"
+        android:icon="@drawable/graph"
+        android:title="@string/label_graph"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/subs"
+        android:icon="@drawable/mailinglist"
+        android:title="@string/label_sub"
+        app:showAsAction="ifRoom"/>
+
+</menu>

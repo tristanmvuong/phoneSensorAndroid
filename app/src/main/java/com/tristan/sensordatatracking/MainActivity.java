@@ -5,9 +5,13 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -27,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static final String TAG = "accelerometerSensor";
     private SensorData sensorData;
     private Long lastRun;
+    private BottomNavigationView bottomNavView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +42,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         setContentView(R.layout.activity_main);
 
+        bottomNavView = (BottomNavigationView) findViewById(R.id.bottomNav);
+
+        bottomNavView.setOnNavigationItemSelectedListener(new SensorDataBottomNavListener());
+
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         sensorManager.registerListener(this, accelerometer, 5000000);
         float[] initValues = {0f, 0f, 0f};
         this.lastRun = System.currentTimeMillis();
-        setAccelerometerDataDisplay(initValues);
+        //setAccelerometerDataDisplay(initValues);
 
         CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
                 getApplicationContext(),
@@ -55,10 +64,30 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         this.sensorData = lambdaInvokerFactory.build(SensorData.class);
 
-        addListenerToGetAccelerometer();
+        //addListenerToGetAccelerometer();
     }
 
+    private class SensorDataBottomNavListener implements BottomNavigationView.OnNavigationItemSelectedListener {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.raw:
+                    // TODO
+                    return true;
+                case R.id.graph:
+                    // TODO
+                    return true;
+                case R.id.subs:
+                    // TODO
+                    return true;
+            }
+            return false;
+        }
+    }
+
+
     public void addListenerToGetAccelerometer() {
+        /*
         Button getData = (Button) findViewById(R.id.getAccelerometerData);
         getData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 Log.d(TAG, "Success");
             }
         });
+        */
     }
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -77,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     private void setAccelerometerDataDisplay(float [] values) {
+        /*
         TextView accelerometerSensorData = (TextView) findViewById(R.id.accelerometerSensorData);
         String data = "x: " + values[0] + " y: " + values[1] + " z: " + values[2];
         accelerometerSensorData.setText(data);
@@ -94,8 +125,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
             lastRun = System.currentTimeMillis();
         }
+        */
     }
 
+    /*
     private Map<String,AccelerometerData> getAccelerometerData(Long startDate, Long endDate) {
         DateRange dateRange = new DateRange();
         dateRange.setStartDate(startDate);
@@ -107,4 +140,5 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             return null;
         }
     }
+    */
 }
