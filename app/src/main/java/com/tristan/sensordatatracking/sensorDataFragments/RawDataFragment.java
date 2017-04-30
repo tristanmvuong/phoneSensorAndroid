@@ -1,8 +1,10 @@
 package com.tristan.sensordatatracking.sensorDataFragments;
 
+import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,6 +18,8 @@ import com.tristan.sensordatatracking.lambda.entity.AccelerometerData;
 import com.tristan.sensordatatracking.lambda.function.SensorData;
 import com.tristan.sensordatatracking.lambda.util.LambdaUtil;
 
+import static android.content.Context.SENSOR_SERVICE;
+
 public class RawDataFragment extends Fragment implements SensorEventListener {
     private static final String TAG = "accelerometerSensor";
     private SensorData sensorData;
@@ -27,6 +31,8 @@ public class RawDataFragment extends Fragment implements SensorEventListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.raw_data_fragment, container, false);
+        SensorManager sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 5000000);
         lastRun = System.currentTimeMillis();
         sensorData = (SensorData) LambdaUtil.getFunction(getActivity().getApplicationContext(), SensorData.class);
         return rootView;
@@ -58,11 +64,24 @@ public class RawDataFragment extends Fragment implements SensorEventListener {
             accelerometerData.setZ(values[2]);
             accelerometerData.setDate(System.currentTimeMillis());
             try {
-                sensorData.save(accelerometerData);
+                SensorSave sensorSave = new SensorSave(accelerometerData);
+                new Thread(sensorSave).start();
             } catch (Exception e) {
                 Log.e(TAG, "error trying to save the data");
             }
             lastRun = System.currentTimeMillis();
+        }
+    }
+
+    private class SensorSave implements Runnable {
+        AccelerometerData accelerometerData;
+
+        SensorSave(AccelerometerData accelerometerData) {
+            this.accelerometerData = accelerometerData;
+        }
+
+        public void run() {
+            sensorData.save(accelerometerData);
         }
     }
 }

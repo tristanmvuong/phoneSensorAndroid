@@ -1,5 +1,6 @@
 package com.tristan.sensordatatracking.sensorDataFragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.tristan.sensordatatracking.lambda.entity.DateRange;
 import com.tristan.sensordatatracking.lambda.function.SensorData;
 import com.tristan.sensordatatracking.lambda.util.LambdaUtil;
 
+import java.util.List;
 import java.util.Map;
 
 public class GraphFragment extends Fragment {
@@ -44,21 +46,34 @@ public class GraphFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Map<String,AccelerometerData> data = getAccelerometerData(0L, System.currentTimeMillis());
+                getAccelerometerData(0L, System.currentTimeMillis());
                 Log.d(TAG, "Success");
             }
         });
     }
 
-    private Map<String,AccelerometerData> getAccelerometerData(Long startDate, Long endDate) {
+    private void getAccelerometerData(Long startDate, Long endDate) {
         DateRange dateRange = new DateRange();
         dateRange.setStartDate(startDate);
         dateRange.setEndDate(endDate);
         try {
-            return sensorData.getDataByDateRange(dateRange);
+            new SensorGetData().execute(dateRange);
         } catch (Exception e) {
             Log.e(TAG, "error trying to get data");
-            return null;
         }
+    }
+
+    private class SensorGetData extends AsyncTask<DateRange, Void, Map<String,AccelerometerData>> {
+        protected Map<String,AccelerometerData> doInBackground(DateRange...dateRanges) {
+            return sensorData.getDataByDateRange(dateRanges[0]);
+        }
+
+        protected void onPostExecute(Map<String,AccelerometerData> result) {
+            Graph(result);
+        }
+    }
+
+    private void Graph(Map<String,AccelerometerData> dataPoints) {
+        Log.d(TAG, "Graphing");
     }
 }

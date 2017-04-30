@@ -17,6 +17,7 @@
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         app:itemBackground="?attr/colorPrimary"
         app:itemIconTint="@drawable/selector_bottombar_item"
