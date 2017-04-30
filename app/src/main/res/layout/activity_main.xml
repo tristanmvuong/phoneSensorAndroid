@@ -6,6 +6,13 @@
     android:layout_height="match_parent"
     tools:context="com.tristan.sensordatatracking.MainActivity">
 
+    <FrameLayout
+        android:id="@+id/frame_fragmentholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_marginBottom="?attr/actionBarSize" />
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
@@ -15,22 +22,5 @@
         app:itemIconTint="@drawable/selector_bottombar_item"
         app:itemTextColor="@drawable/selector_bottombar_text"
         app:menu="@menu/bottombar_menu" />
-
-    <!--
-    <TextView
-        android:id="@+id/accelerometerSensorData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="0dp" />
-
-    <Button
-        android:id="@+id/getAccelerometerData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteY="0dp"
-        tools:layout_editor_absoluteX="0dp" />
-        -->
 
 </android.support.v7.widget.LinearLayoutCompat>
