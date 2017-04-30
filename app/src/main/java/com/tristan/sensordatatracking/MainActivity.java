@@ -35,8 +35,14 @@ public class MainActivity extends AppCompatActivity {
         graphFragment = new GraphFragment();
         subFragment = new SubFragment();
 
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.frame_fragmentholder,rawDataFragment)
+                .add(R.id.frame_fragmentholder,graphFragment)
+                .add(R.id.frame_fragmentholder,subFragment)
+                .commit();
+
         switchFragment(rawDataFragment);
-        //addListenerToGetAccelerometer();
     }
 
     private class SensorDataBottomNavListener implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -60,7 +66,10 @@ public class MainActivity extends AppCompatActivity {
     private void switchFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.frame_fragmentholder, fragment)
+                .hide(rawDataFragment)
+                .hide(graphFragment)
+                .hide(subFragment)
+                .show(fragment)
                 .commit();
     }
 }

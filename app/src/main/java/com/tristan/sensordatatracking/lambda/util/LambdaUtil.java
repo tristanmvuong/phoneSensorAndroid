@@ -1,7 +1,6 @@
 package com.tristan.sensordatatracking.lambda.util;
 
 import android.content.Context;
-
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
 import com.amazonaws.regions.Regions;

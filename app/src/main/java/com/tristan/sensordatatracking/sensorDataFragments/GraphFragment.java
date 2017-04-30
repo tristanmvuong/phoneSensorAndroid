@@ -22,19 +22,22 @@ import java.util.Map;
 public class GraphFragment extends Fragment {
     private static final String TAG = "accelerometerSensor";
     private SensorData sensorData;
+    private View rootView;
     private Button button;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.raw_data_fragment, container, false);
-        button = (Button) rootView.findViewById(R.id.getAccelerometerData);
-
+        rootView = inflater.inflate(R.layout.graph_fragment, container, false);
         sensorData = (SensorData) LambdaUtil.getFunction(getActivity().getApplicationContext(), SensorData.class);
-
-        addListenerToGetAccelerometer();
-
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        button = (Button) rootView.findViewById(R.id.getAccelerometerData);
+        addListenerToGetAccelerometer();
     }
 
     public void addListenerToGetAccelerometer() {
